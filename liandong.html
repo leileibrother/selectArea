@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>三级联动</title>
+<style>
+    div{
+        width:500px;
+        margin:0 auto;
+        text-align:center;
+    }
+    select{
+        width:140px;
+    }
+</style>
+</head>
+<body>
+<div>
+    <h1>三级联动</h1>
+    <select id="province">
+        <option value="省">省</option>
+    </select>
+    <select id="city">
+        <option value="市">市</option>
+    </select>
+    <select id="country">
+        <option value="县">县</option>
+    </select>
+</div>
+<script type="text/javascript" src="jquery-1.11.3.js"></script>
+<script src="city.js"></script>
+<script>
+var allCity = city.citylist;
+$.each(allCity,function(i,n){
+    //添加每一个省
+    $("#province").append('<option value="'+ n.p +'">' + n.p + '</option>');
+});
+$("#province").change(function(){
+    $("#country").show();
+    //执行后面函数之前清空一下
+    $("#city").html('<option value="市">市</option>');
+    $("#country").html('<option value="县">县</option>');
+    $.each(allCity,function(i,n){
+        if($("#province").val()==n.p){
+            $.each(n.c,function(a,b){
+                //添加每一个市
+                $("#city").append('<option value="'+ b.n + '">' + b.n + '</option>');
+            });
+        }
+    });
+});
+
+$("#city").change(function(){
+    //执行后面函数之前清空一下
+    $("#country").html('<option value="县">县</option>');
+    $.each(allCity,function(i,n){
+        if($("#province").val()==n.p){
+            $.each(n.c,function(a,b){
+                if($("#city").val()==b.n){
+                    if(b.a){
+                        $.each(b.a,function(c,d){
+                            //添加每一个县
+                            $("#country").append('<option value="'+ d.s + '">' + d.s + '</option>');
+                        })
+                    }else{
+                        $("#country").hide();
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+</body>
+</html>
